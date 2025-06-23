@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+.env
+venv/
+
+!app/fhe_client_server/client.zip
+!app/fhe_client_server/server.zip
