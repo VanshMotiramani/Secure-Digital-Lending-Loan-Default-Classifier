@@ -1,5 +1,13 @@
 # Base image
-FROM python:3.10-slim
+FROM python:3.10-bullseye
+
+
+# Install required system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    binutils \
+    && rm -rf /var/lib/apt/lists/* --verbose
+
 
 # Set working directory
 WORKDIR /app
@@ -9,7 +17,8 @@ COPY ./app ./app
 COPY requirements.txt .
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install --no-cache-dir -r requirements.txt 
 
 # Expose FastAPI port
 EXPOSE 8000

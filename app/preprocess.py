@@ -1,15 +1,7 @@
 
-"""import numpy as np
+# preprocessing of input 
 
-def get_ordered_values(data: dict, feature_order: list):
-    
-    return [data[f] for f in feature_order]
-
-def preprocess_input(values, scaler):
-    
-    X = np.array(values, dtype=float).reshape(1, -1)
-    return scaler.transform(X)
-"""
+# Grouped features default
 PRIORITY_FLAG_GROUPS = [
     {
         "flags": [
@@ -138,25 +130,26 @@ PRIORITY_FLAG_GROUPS = [
 from typing import Dict, List
 import numpy as np
 from app.encoder import load_features
-# (paste the big feature_is_negative dict here, or import it)
-from app.constants import  feature_is_negative
+from app.constants import NUMERIC_DEFAULTS, FLAG_COLUMNS, feature_is_negative
+
 FEATURE_ORDER = load_features()
 
-from app.constants import FLAG_COLUMNS
+# all treated as yes
+YES_VALUES = {"yes", "y", "true", "1", 1, True,"True","TRUE","Yes"}
 
-YES_VALUES = {"yes", "y", "true", "1", 1, True,"True","TRUE","Yes"}   # anything outside → 0
-
-from app.constants import NUMERIC_DEFAULTS
-
+# fill missing numeric data in input 
 def impute_numeric_defaults(sample: dict) -> dict:
     """
     Fill missing / NaN / empty numeric fields with predefined medians/means.
     """
+
+    # original should remain the same
     fixed = sample.copy()
+
     for feat, default_val in NUMERIC_DEFAULTS.items():
+        # impute missing features
         if feat not in fixed or fixed[feat] in ("", None):
             fixed[feat] = default_val
-        # Handle explicit NaN (e.g., from JS)                          ↓
         elif isinstance(fixed[feat], str):
             try:
                 fixed[feat] = float(fixed[feat])
@@ -164,15 +157,12 @@ def impute_numeric_defaults(sample: dict) -> dict:
                 fixed[feat] = default_val
     return fixed
 
-
-
-
-
+# Set only one as 1 in the groups 
 def apply_flag_priorities(sample: dict) -> dict:
     """
     For each mutually exclusive group, set only one to 1 (others to 0).
-    If none provided, set default.
     """
+
     fixed = sample.copy()
     for group in PRIORITY_FLAG_GROUPS:
         found = False
@@ -182,26 +172,22 @@ def apply_flag_priorities(sample: dict) -> dict:
                 fixed[flag] = 1.0
             else:
                 fixed[flag] = 0.0
+
         # If none set, apply default
         if not found:
             for flag in group["flags"]:
                 fixed[flag] = 1.0 if flag == group["default"] else 0.0
     return fixed
 
-
-
-
-
-
-
+# Convert flag columns to float
 def encode_flag_columns(sample: dict) -> dict:
     """
     Convert flag columns (yes/no, true/false, 1/0) → float 1.0 / 0.0.
-    Unknown or missing keys default to 0.0.
+    Unknown or missing default to 0.0
     """
     fixed = sample.copy()
     for col in FLAG_COLUMNS:
-        raw = fixed.get(col, 0)          # missing → 0
+        raw = fixed.get(col, 0)
         if isinstance(raw, str):
             fixed[col] = 1.0 if raw.strip().lower() in YES_VALUES else 0.0
         elif raw in YES_VALUES:
@@ -210,9 +196,10 @@ def encode_flag_columns(sample: dict) -> dict:
             fixed[col] = 0.0
     return fixed
 
+# if negative features received as positive, flip them to negative
 def ensure_negative_sign(sample: Dict[str, float]) -> Dict[str, float]:
     """
-    Flip sign for any feature that must be negative but was sent as positive.
+    Flip sign for feature that should be negative but was sent positive
     """
     fixed = sample.copy()
     for feat, must_be_neg in feature_is_negative.items():
@@ -222,22 +209,18 @@ def ensure_negative_sign(sample: Dict[str, float]) -> Dict[str, float]:
                 fixed[feat] = -abs(val)
     return fixed
 
-
+# get features in order of features.csv/json: return ordered data
 def get_ordered_values(payload: Dict[str, float],
                        feature_order: List[str] = FEATURE_ORDER,
                        default: float = 0.0) -> List[float]:
-    # 1. yes/no → 1/0
+    
     payload = encode_flag_columns(payload)
-    # 2. mutually‑exclusive default handling
     payload = apply_flag_priorities(payload)
-    # 3. fill numeric medians/means
     payload = impute_numeric_defaults(payload)
-    # 4. ensure negatives for day‑type fields
     payload = ensure_negative_sign(payload)
-    # 5. reorder & pad
     return [payload.get(f, default) for f in feature_order]
 
-
+# preprocess input on scaler: return scaled data
 def preprocess_input(values: List[float], scaler):
     X = np.array(values, dtype=float).reshape(1, -1)
     return scaler.transform(X)

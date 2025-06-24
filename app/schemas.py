@@ -4,21 +4,17 @@ import pandas as pd
 from pathlib import Path
 from typing import Union, Dict
 import json
-# ----- load feature list once -----
+
+# load features
 FEATURES_JSON = Path(__file__).parent / "models" / "selected_features(5).json"
 with open(FEATURES_JSON, "r") as f:
     SELECTED_FEATURES: List[str] = json.load(f)
 
-# build an example with zeros
+# initialize example body to 0.0
 _example_body = {f: 0.0 for f in SELECTED_FEATURES}
 NumberOrString = Union[float, int, str, bool]
 
-
-class FeatureImpact(BaseModel):
-    feature: str
-    value: float
-    shap_impact: float
-
+#Input Schema
 class InputData(BaseModel):
     EXT_SOURCE_1: float
     EXT_SOURCE_2: float
@@ -26,14 +22,14 @@ class InputData(BaseModel):
     DAYS_BIRTH: int
     DAYS_ID_PUBLISH: int
 
+# Input Schema 2
 class PredictionRequest(BaseModel):
     data: Dict[str, NumberOrString] = Field(
         ...,
         example=_example_body      
     )
 
-from pydantic import BaseModel, Field
-
+# Response Schema
 class PredictionResponse(BaseModel):
     prediction: int = Field(..., description="Binary prediction: 0 for non-default, 1 for default")
     probability_of_default: float = Field(..., description="Probability of default (class 1)")

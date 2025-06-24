@@ -1,5 +1,7 @@
+# Tranform postive features to negative features (required)
+
 feature_is_negative = {
-    # ── A ─────────────────────────────
+   
     "AGE": False,
     "AMT_ANNUITY": False,
     "AMT_CREDIT": False,
@@ -7,7 +9,7 @@ feature_is_negative = {
     "AMT_INCOME_TOTAL": False,
     "AMT_REQ_CREDIT_BUREAU_YEAR": False,
     "APARTMENTS_AVG": False,
-    # ── B ─────────────────────────────
+
     "BASEMENTAREA_AVG": False,
     "BUREAU_AMT_CREDIT_MAX_OVERDUE_MAX": False,
     "BUREAU_AMT_CREDIT_MAX_OVERDUE_MEAN": False,
@@ -36,7 +38,7 @@ feature_is_negative = {
     "BUREAU_SK_ID_BUREAU_MAX": False,
     "BUREAU_SK_ID_BUREAU_MEAN": False,
     "BUREAU_SK_ID_BUREAU_MIN": False,
-    # ── C ─────────────────────────────
+    
     "CHANNEL_TYPE_AP+ (Cash loan)": False,
     "CHANNEL_TYPE_Country-wide": False,
     "CHANNEL_TYPE_Credit and cash offices": False,
@@ -55,28 +57,28 @@ feature_is_negative = {
     "CREDIT_ACTIVE_Closed": False,
     "CREDIT_TYPE_Consumer credit": False,
     "CREDIT_TYPE_Credit card": False,
-    # ── D ─────────────────────────────
+   
     "DAYS_BIRTH": True,
     "DAYS_EMPLOYED": True,
     "DAYS_ID_PUBLISH": True,
     "DAYS_LAST_PHONE_CHANGE": True,
     "DAYS_REGISTRATION": True,
     "DEF_30_CNT_SOCIAL_CIRCLE": False,
-    # ── E ─────────────────────────────
+
     "ENTRANCES_AVG": False,
     "EXT_SOURCE_1": False,
     "EXT_SOURCE_2": False,
     "EXT_SOURCE_3": False,
-    # ── F ─────────────────────────────
+
     "FLOORSMAX_AVG": False,
     "FLOORSMIN_AVG": False,
-    # ── H ─────────────────────────────
+
     "HOUR_APPR_PROCESS_START": False,
-    # ── L ─────────────────────────────
+
     "LANDAREA_AVG": False,
     "LIVINGAPARTMENTS_AVG": False,
     "LIVINGAREA_AVG": False,
-    # ── N (most are one‑hot flags) ────
+
     "NAME_CLIENT_TYPE_New": False,
     "NAME_CLIENT_TYPE_Repeater": False,
     "NAME_CONTRACT_STATUS_Active_x": False,
@@ -111,11 +113,11 @@ feature_is_negative = {
     "NAME_YIELD_GROUP_high": False,
     "NAME_YIELD_GROUP_low_normal": False,
     "NAME_YIELD_GROUP_middle": False,
-    # ── O ─────────────────────────────
+        
     "OBS_30_CNT_SOCIAL_CIRCLE": False,
     "OBS_60_CNT_SOCIAL_CIRCLE": False,
     "OWN_CAR_AGE": False,
-    # ── P ─────────────────────────────
+
     "POS_CNT_INSTALMENT_FUTURE_MAX": False,
     "POS_CNT_INSTALMENT_FUTURE_MEAN": False,
     "POS_CNT_INSTALMENT_FUTURE_SUM": False,
@@ -133,7 +135,7 @@ feature_is_negative = {
     "POS_SK_DPD_SUM": False,
     "POS_SK_ID_PREV_MAX": False,
     "POS_SK_ID_PREV_MEAN": False,
-    # ── PR (prev. app aggregates) ─────
+
     "PREVAPP_AMT_ANNUITY_MAX": False,
     "PREVAPP_AMT_ANNUITY_MEAN": False,
     "PREVAPP_AMT_ANNUITY_SUM": False,
@@ -171,18 +173,18 @@ feature_is_negative = {
     "PREVAPP_SELLERPLACE_AREA_MEAN": False,
     "PREVAPP_SK_ID_PREV_MAX": False,
     "PREVAPP_SK_ID_PREV_MEAN": False,
-    # ── PRD (product‑combo) ───────────
+
     "PRODUCT_COMBINATION_Cash": False,
     "PRODUCT_COMBINATION_POS mobile with interest": False,
-    # ── R ─────────────────────────────
+    
     "REGION_POPULATION_RELATIVE": False,
     "REGION_RATING_CLIENT": False,
     "REGION_RATING_CLIENT_W_CITY": False,
-    # ── S ─────────────────────────────
+
     "SK_ID_CURR": False,
-    # ── T ─────────────────────────────
+
     "TOTALAREA_MODE": False,
-    # ── W ─────────────────────────────
+
     "WEEKDAY_APPR_PROCESS_START_FRIDAY": False,
     "WEEKDAY_APPR_PROCESS_START_MONDAY_y": False,
     "WEEKDAY_APPR_PROCESS_START_SATURDAY_y": False,
@@ -190,24 +192,14 @@ feature_is_negative = {
     "WEEKDAY_APPR_PROCESS_START_THURSDAY_y": False,
     "WEEKDAY_APPR_PROCESS_START_TUESDAY_y": False,
     "WEEKDAY_APPR_PROCESS_START_WEDNESDAY_y": False,
-    # ── Y ─────────────────────────────
+
     "YEARS_BEGINEXPLUATATION_AVG": False,
     "YEARS_BUILD_AVG": False,
 }
-# app/constants.py  (excerpt)
 
-
-
-
-
-
-# app/constants.py  (excerpt)
-
-# … FEATURE_ORDER, FLAG_COLUMNS, PRIORITY_FLAG_GROUPS already here …
-
-# Numerical defaults
+# default for features
 NUMERIC_DEFAULTS = {
-    # ── Medians (days / counts etc.) ─────────────────────
+    # Medians
     "BUREAU_DAYS_CREDIT_MAX": -300.00,
     "BUREAU_DAYS_CREDIT_MEAN": -1050.57,
     "BUREAU_DAYS_CREDIT_MIN": -1827.00,
@@ -268,7 +260,7 @@ NUMERIC_DEFAULTS = {
     "FLOORSMIN_AVG": 0.21,
     "AMT_REQ_CREDIT_BUREAU_YEAR": 1.00,
 
-    # ── Means (amount / financial) ───────────────────────
+    # Means 
     "BUREAU_AMT_CREDIT_SUM_SUM": 1813502.67,
     "BUREAU_AMT_CREDIT_SUM_MEAN": 351942.67,
     "BUREAU_AMT_CREDIT_SUM_MAX": 900704.23,
@@ -310,15 +302,6 @@ NUMERIC_DEFAULTS = {
     "AMT_ANNUITY": 27108.49,
     "AMT_GOODS_PRICE": 538316.29,
 }
-
-
-
-
-
-
-
-
-
 
 FLAG_COLUMNS = [
     "NAME_CONTRACT_STATUS_Active_x",
