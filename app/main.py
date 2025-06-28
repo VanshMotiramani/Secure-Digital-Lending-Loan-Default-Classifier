@@ -60,7 +60,7 @@ def predict(request: InputData):
         X_processed = preprocess_input(ordered_values, scaler)
 
         #CLIENT
-        # Encrypt plaintext input at client: returns serialized (hexadecimal) input and 
+        # Encrypt plaintext input at client: returns serialized (json format) input and 
         # public evaluation keys
         encrypted_input = client.quantize_encrypt_serialize(X_processed)
         evaluation_keys = client.get_serialized_evaluation_keys()
